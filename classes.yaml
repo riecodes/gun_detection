@@ -1,0 +1,72 @@
+# Class schema for the Philippine weapon-detection dataset.
+#
+# IDs are APPEND-ONLY, forever. Volunteers' YOLO label files store the integer id,
+# so renumbering silently invalidates every donated label. Retired classes keep
+# their id and get `retired: true` -- they never get reused.
+#
+# `aliases` are matched case- and punctuation-insensitively ("Screw Driver",
+# "screwdriver" and "SCREW_DRIVER" are the same alias), so only list spellings
+# that differ by more than case or separators.
+version: 1
+
+# Order defines the tier ids produced by `remap_classes.py --to tier`.
+groups: [context, firearm, blade, blunt, improvised, other]
+
+# Class names seen in public datasets that we deliberately refuse to map: too
+# vague to place, or out of scope. The importer reports these separately from
+# names it has never seen, so a genuinely new name still fails loudly.
+unmapped_review:
+  [weapon, weapons, dangerous object, object, missile, rocket launcher, bike, bicycle]
+
+classes:
+  - {id: 0,  name: person,     group: context, aliases: [person, people, human],
+     notes: "Import only from datasets that label every person; partial person labels teach the model that people are background."}
+
+  - {id: 1,  name: pistol,     group: firearm, aliases: [pistol, handgun, glock, semi auto pistol]}
+  - {id: 2,  name: revolver,   group: firearm, aliases: [revolver]}
+  - {id: 3,  name: rifle_ar15, group: firearm, aliases: [ar15, m4, m16], notes: "AR-15/M4 pattern."}
+  - {id: 4,  name: rifle_ak,   group: firearm, aliases: [ak47, ak], notes: "AK pattern."}
+  - {id: 5,  name: rifle_bolt, group: firearm, aliases: [bolt action rifle, hunting rifle, sniper rifle]}
+  - {id: 6,  name: shotgun,    group: firearm, aliases: [shotgun]}
+  - {id: 7,  name: smg,        group: firearm, aliases: [smg, submachine gun, uzi]}
+  - {id: 8,  name: carbine_conversion_kit, group: firearm, aliases: [cck, carbine conversion kit],
+     notes: "Pistol in a carbine chassis. Common locally, absent from every public dataset."}
+  - {id: 9,  name: paltik,     group: firearm, filipino: paltik, aliases: [paltik, improvised gun, homemade gun]}
+  - {id: 10, name: sumpak,     group: firearm, filipino: sumpak, aliases: [sumpak, improvised shotgun]}
+  - {id: 11, name: airsoft_replica, group: firearm, aliases: [airsoft, airsoft gun, replica gun],
+     notes: "Only when an orange tip or replica marking is actually visible. Otherwise label what it looks like."}
+  - {id: 12, name: unknown_firearm, group: firearm, aliases: [gun, firearm, heavy gun],
+     notes: "Firearm-shaped, subtype not determinable from the frame. The honest CCTV label."}
+
+  - {id: 13, name: bolo,       group: blade, filipino: itak, aliases: [bolo, itak, bolo knife, machete],
+     notes: "A farm tool in most Philippine frames. Still labeled -- threat tiering happens downstream."}
+  - {id: 14, name: balisong,   group: blade, filipino: balisong, aliases: [balisong, butterfly knife, batangas knife]}
+  - {id: 15, name: kitchen_knife, group: blade, aliases: [kitchen knife, chef knife, cleaver]}
+  - {id: 16, name: folding_knife, group: blade, aliases: [folding knife, pocket knife, jackknife]}
+  - {id: 17, name: karambit,   group: blade, aliases: [karambit, kerambit]}
+  - {id: 18, name: ice_pick,   group: blade, aliases: [ice pick, awl]}
+  - {id: 19, name: scissors,   group: blade, aliases: [scissors, scissor, shears]}
+  - {id: 20, name: box_cutter, group: blade, aliases: [box cutter, utility knife, cutter]}
+  - {id: 21, name: sword,      group: blade, aliases: [sword, katana, cutlass, sabre, spear],
+     notes: "`spear` is mapped here for want of a polearm class; revisit if spear volume ever justifies its own id."}
+  - {id: 22, name: axe,        group: blade, aliases: [axe, hatchet]}
+  - {id: 23, name: knife_unknown, group: blade, aliases: [knife, knives, pisau, blade, sharp weapon, sharp object],
+     notes: "Blade visible, type not determinable. Most imported knife boxes land here."}
+
+  - {id: 24, name: baseball_bat, group: blunt, aliases: [baseball bat, bat]}
+  - {id: 25, name: pipe,       group: blunt, aliases: [pipe, steel pipe, lead pipe, metal pipe]}
+  - {id: 26, name: crowbar,    group: blunt, aliases: [crowbar, pry bar]}
+  - {id: 27, name: hammer,     group: blunt, aliases: [hammer, mallet]}
+  - {id: 28, name: screwdriver, group: blunt, aliases: [screwdriver]}
+  - {id: 29, name: brass_knuckles, group: blunt, aliases: [brass knuckles, knuckle duster]}
+  - {id: 30, name: baston,     group: blunt, filipino: baston, aliases: [baston, arnis stick, escrima stick, eskrima stick]}
+
+  - {id: 31, name: indian_pana, group: improvised, filipino: indian pana, aliases: [indian pana, pana, improvised dart]}
+
+  - {id: 32, name: grenade,    group: other, aliases: [grenade, hand grenade]}
+  - {id: 33, name: stun_gun,   group: other, aliases: [stun gun, taser]}
+
+  - {id: 34, name: blunt_unknown, group: blunt, aliases: [blunt object, blunt weapon, blunt],
+     notes: "Blunt object, type not determinable. Import target."}
+  - {id: 35, name: rifle_unknown, group: firearm, aliases: [rifle, riffle, long gun, short rifle],
+     notes: "Long gun, pattern not determinable. Keeps the long-gun/handgun distinction that `unknown_firearm` would throw away."}
